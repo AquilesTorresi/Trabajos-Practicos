@@ -2,9 +2,9 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida SansUnicode', Geneva, Verdana, sans-serif;
 }
+
 
 :root {
     /* Declaro variables CSS con colores principales */
@@ -45,10 +45,7 @@ nav>ul {
     justify-content: center;
 }
 
-nav li {
-    flex:
-        0 0 auto;
-}
+nav li {}
 
 nav li a {
     display: block;
@@ -110,6 +107,7 @@ footer {
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
+    background-color: var(--color-theme);
 }
 
 footer p {
@@ -133,4 +131,3 @@ main p {
         padding-bottom: 20px;
     }
 }
-    
