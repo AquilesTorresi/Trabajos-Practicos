@@ -99,7 +99,7 @@ main section {
     justify-content: space-around;
 }
 
-footer {
+footer { 
     position: fixed;
     bottom: 0px;
     background: var(--color-theme);
@@ -108,7 +108,7 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: var(--color-theme);
-}
+}  
 
 footer p {
     font-size: small;
