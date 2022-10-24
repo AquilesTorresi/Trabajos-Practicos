@@ -1,3 +1,4 @@
+from ast import If
 from datetime import date
 import sqlite3
 
@@ -11,10 +12,11 @@ class ProgramaPrincipal:
             print("3)-------->  Borrar Monopatin  <-------------------------")
             print("4)-------->  Carga la disponibilidad  <------------------")
             print("5)-------->  Mostrar producto  <-------------------------")
+            print("6)-------->  Actualizar precios a dolar  <---------------")
             print("7)-------->  Mostarar datos hasta la fecha ingresada  <--")
-            print("0)========>  Salir de menu  <============================")
-            print("9)-:::::::::::::::::__CREAR TABLA__::::::::::::::::::::::")
-            print("10)-::::::::::__BORRAR TODOS LOS DATOS__:::::::::::::::::")
+            print("8)::::::::::::::::::__CREAR TABLA__::::::::::::::::::::::")
+            print("9):::::::::::__BORRAR TODOS LOS DATOS__::::::::::::::::::")
+            print("0)==============>  Salir de menu  <======================") #SIEMPRE Q QUIERAS RESTABLECER INGRESAR LOS Nº 9 Y 8 EN ESE ORDEN
             nro = int(input("Por favor ingrese un número: "))
             if nro == 1:
                 modelo = input("Por favor ingrese el modelo del Monopatin: ")
@@ -36,8 +38,24 @@ class ProgramaPrincipal:
             if nro == 4:
                 marca = str(input("por favor ingrese la marca para cargar el stock: "))
                 monopatin.cargar_stock(self, marca)    
-            if nro==5:
+            if nro == 5:
                 monopatin.mostrar(self)
+            if nro == 6:
+                actualizarAdolar: float = 0.23
+                sql = "UPDATE MONOPATIN SET precio=precio+(precio*'{}') ".format(actualizarAdolar)
+                conexion = Conexiones()
+                conexion.abrirConexion()
+                try:
+                    conexion.miCursor.execute(sql)
+                    conexion.miConexion.commit()
+                    conexion.miCursor.execute("SELECT * FROM HISTORICA")
+                    datos = conexion.miCursor.fetchall()
+                    for i in datos:
+                        print(i)
+                except:
+                    print("Error")
+                finally:
+                    conexion.cerrarConexion()
             if nro == 7:
                 anio = str(input("Ingrese el año: "))
                 mes = str(input("Ingrese el mes: "))
@@ -53,15 +71,16 @@ class ProgramaPrincipal:
 
             if nro == 0:
                 break
-            if nro == 9:
+            if nro == 8:
                 ProgramaPrincipal.crearTablas(self)
-            if nro == 10:
+            if nro == 9:
                 ProgramaPrincipal.borrarTablas(self)
 
     def crearTablas(self):
         conexion = Conexiones()
         conexion.abrirConexion()
-        conexion.miCursor.execute("CREATE TABLE MONOPATIN (_id INTEGER PRIMARY KEY , modelo VARCHAR(30), marca  VARCHAR(30), potencia VARCHAR(30), precio REAL, color VARCHAR(30), cantidadDisponibles INTEGER, fechaUltimoPrecio DATETIME)")    
+        conexion.miCursor.execute("CREATE TABLE MONOPATIN (_id INTEGER PRIMARY KEY , modelo VARCHAR(30), marca  VARCHAR(30), potencia VARCHAR(30), precio REAL, color VARCHAR(30), cantidadDisponibles INTEGER, fechaUltimoPrecio DATETIME)")
+        conexion.miCursor.execute("CREATE TABLE HISTORICA (_id INTEGER PRIMARY KEY , modelo VARCHAR(30), marca  VARCHAR(30), potencia VARCHAR(30), precio REAL, color VARCHAR(30), cantidadDisponibles INTEGER, fechaUltimoPrecio DATETIME)")    
         conexion.miConexion.commit()       
         conexion.cerrarConexion()
 
@@ -69,6 +88,7 @@ class ProgramaPrincipal:
         conexion = Conexiones()
         conexion.abrirConexion()
         conexion.miCursor.execute("DROP TABLE IF EXISTS MONOPATIN")
+        conexion.miCursor.execute("DROP TABLE IF EXISTS HISTORICA")
         conexion.miConexion.commit()       
         conexion.cerrarConexion()
 
@@ -87,6 +107,7 @@ class monopatin:
         conexion.abrirConexion()
         try:
             conexion.miCursor.execute("INSERT INTO MONOPATIN (modelo, marca, potencia, precio, color, cantidadDisponibles, fechaUltimoPrecio) VALUES('{}','{}','{}','{}','{}','{}','{}')".format(self.modelo,self.marca,self.potencia,self.precio,self.color,self.cantidadDisponibles,self.fechaUltimoPrecio))
+            conexion.miCursor.execute("INSERT INTO HISTORICA (modelo, marca, potencia, precio, color, cantidadDisponibles, fechaUltimoPrecio) VALUES('{}','{}','{}','{}','{}','{}','{}')".format(self.modelo,self.marca,self.potencia,self.precio,self.color,self.cantidadDisponibles,self.fechaUltimoPrecio))
             conexion.miConexion.commit()
             print("Monopatin cargado exitosamente")
         except:
